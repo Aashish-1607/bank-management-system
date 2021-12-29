@@ -5,8 +5,7 @@
 
 using namespace std;
 
-void Account::create_account()
-{
+void Account::create_account(){
 	cout<<"\nEnter The account No. :";
 	cin>>acno;
 	cout<<"\n\nEnter The Name of The account Holder : ";
@@ -20,8 +19,7 @@ void Account::create_account()
 	cout<<"\n\n\nAccount Created..";
 }
 
-void Account::show_account() const
-{
+void Account::show_account() const{
 	cout<<"\nAccount No. : "<<acno;
 	cout<<"\nAccount Holder Name : ";
 	cout<<name;
@@ -30,8 +28,7 @@ void Account::show_account() const
 }
 
 
-void Account::modify()
-{
+void Account::modify(){
 	cout<<"\nAccount No. : "<<acno;
 	cout<<"\nModify Account Holder Name : ";
 	cin.ignore();
@@ -44,41 +41,34 @@ void Account::modify()
 }
 
 	
-void Account::dep(int x)
-{
+void Account::dep(int x){
 	deposit+=x;
 }
 	
-void Account::draw(int x)
-{
+void Account::draw(int x){
 	deposit-=x;
 }
 	
-void Account::report() const
-{
+void Account::report() const{
 	cout<<acno<<" "<<name<<" "<<type<<" "<<deposit<<endl;
 }
 
 	
-int Account::retacno() const
-{
+int Account::getacno() const{
 	return acno;
 }
 
-int Account::retdeposit() const
-{
+int Account::getdeposit() const{
 	return deposit;
 }
 
-char Account::rettype() const
-{
+char Account::gettype() const{
 	return type;
 }
 
 
 
-void write_account()
-{
+void write_account(){
 	Account ac;
 	ofstream outFile;
 	outFile.open("account.dat",ios::binary|ios::app);
@@ -87,23 +77,19 @@ void write_account()
 	outFile.close();
 }
 
-void display_sp(int n)
-{
+void display_sp(int n){
 	Account ac;
 	bool flag=false;
 	ifstream inFile;
 	inFile.open("account.dat",ios::binary);
-	if(!inFile)
-	{
-		cout<<"File could not be open !! Press any Key...";
+	if(!inFile){
+		cout<<"File could not be opened !! Press any Key...";
 		return;
 	}
 	cout<<"\nBALANCE DETAILS\n";
 
-    	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(Account)))
-	{
-		if(ac.retacno()==n)
-		{
+    while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(Account))){
+		if(ac.getacno()==n){
 			ac.show_account();
 			flag=true;
 		}
@@ -113,8 +99,7 @@ void display_sp(int n)
 		cout<<"\n\nAccount number does not exist";
 }
 
-void modify_account(int n)
-{
+void modify_account(int n){
 	bool found=false;
 	Account ac;
 	fstream File;
@@ -127,7 +112,7 @@ void modify_account(int n)
 	while(!File.eof() && found==false)
 	{
 		File.read(reinterpret_cast<char *> (&ac), sizeof(Account));
-		if(ac.retacno()==n)
+		if(ac.getacno()==n)
 		{
 			ac.show_account();
 			cout<<"\n\nEnter The New Details of account"<<endl;
@@ -144,23 +129,19 @@ void modify_account(int n)
 		cout<<"\n\n Record Not Found ";
 }
 
-void delete_account(int n)
-{
+void delete_account(int n){
 	Account ac;
 	ifstream inFile;
 	ofstream outFile;
 	inFile.open("account.dat",ios::binary);
-	if(!inFile)
-	{
+	if(!inFile){
 		cout<<"File could not be open !! Press any Key...";
 		return;
 	}
 	outFile.open("Temp.dat",ios::binary);
 	inFile.seekg(0,ios::beg);
-	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(Account)))
-	{
-		if(ac.retacno()!=n)
-		{
+	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(Account))){
+		if(ac.getacno()!=n){
 			outFile.write(reinterpret_cast<char *> (&ac), sizeof(Account));
 		}
 	}
@@ -171,13 +152,11 @@ void delete_account(int n)
 	cout<<"\n\n\tRecord Deleted ..";
 }
 
-void display_all()
-{
+void display_all(){
 	Account ac;
 	ifstream inFile;
 	inFile.open("account.dat",ios::binary);
-	if(!inFile)
-	{
+	if(!inFile){
 		cout<<"File could not be open !! Press any Key...";
 		return;
 	}
@@ -185,45 +164,38 @@ void display_all()
 	cout<<"====================================================\n";
 	cout<<"A/c no.      NAME           Type  Balance\n";
 	cout<<"====================================================\n";
-	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(Account)))
-	{
+	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(Account))){
 		ac.report();
 	}
 	inFile.close();
 }
 
-void deposit_withdraw(int n, int option)
-{
+void deposit_withdraw(int n, int option){
 	int amt;
 	bool found=false;
 	Account ac;
 	fstream File;
 	File.open("account.dat", ios::binary|ios::in|ios::out);
-	if(!File)
-	{
+	if(!File){
 		cout<<"File could not be open !! Press any Key...";
 		return;
 	}
-	while(!File.eof() && found==false)
-	{
+	while(!File.eof() && found==false){
 		File.read(reinterpret_cast<char *> (&ac), sizeof(Account));
-		if(ac.retacno()==n)
-		{
+		if(ac.getacno()==n){
 			ac.show_account();
-			if(option==1)
-			{
+			if(option==1){
 				cout<<"\n\n\tTO DEPOSITE AMOUNT ";
 				cout<<"\n\nEnter The amount to be deposited";
 				cin>>amt;
 				ac.dep(amt);
 			}
-			if(option==2)
-			{
+			if(option==2){
 				cout<<"\n\n\tTO WITHDRAW AMOUNT ";
 				cout<<"\n\nEnter The amount to be withdraw";
 				cin>>amt;
-				int bal=ac.retdeposit()-amt;
-				if((bal<500 && ac.rettype()=='S') || (bal<1000 && ac.rettype()=='C'))
+				int bal=ac.getdeposit()-amt;
+				if((bal<500 && ac.gettype()=='S') || (bal<1000 && ac.gettype()=='C'))
 					cout<<"Insufficience balance";
 				else
 					ac.draw(amt);
@@ -234,14 +206,14 @@ void deposit_withdraw(int n, int option)
 			cout<<"\n\n\t Record Updated";
 			found=true;
 	       }
-         }
+        }
 	File.close();
 	if(found==false)
 		cout<<"\n\n Record Not Found ";
 }
 
 void intro(){
-    cout<<"\n\n\n\t  IRASSHAIMASE!";
+    cout<<"\n\n\n\tIRASSHAIMASE!";
 	cout<<"\n\n\t  BANK";
 	cout<<"\n\tMANAGEMENT";
 	cout<<"\n\t  SYSTEM";
