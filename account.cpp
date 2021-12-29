@@ -5,12 +5,12 @@
 
 using namespace std;
 
-void Account::create_account(){
+void Account::createAccount(){
 	cout<<"\nEnter The account No. :";
 	cin>>acno;
 	cout<<"\n\nEnter The Name of The account Holder : ";
 	cin.ignore();
-	cin.getline(name,50);
+	cin.getline(name,100);
 	cout<<"\nEnter Type of The account (C/S) : ";
 	cin>>type;
 	type=toupper(type);
@@ -19,7 +19,7 @@ void Account::create_account(){
 	cout<<"\n\n\nAccount Created..";
 }
 
-void Account::show_account() const{
+void Account::showAccount() const{
 	cout<<"\nAccount No. : "<<acno;
 	cout<<"\nAccount Holder Name : ";
 	cout<<name;
@@ -54,30 +54,30 @@ void Account::report() const{
 }
 
 	
-int Account::getacno() const{
+int Account::getAcno() const{
 	return acno;
 }
 
-int Account::getdeposit() const{
+int Account::getDeposit() const{
 	return deposit;
 }
 
-char Account::gettype() const{
+char Account::getType() const{
 	return type;
 }
 
 
 
-void write_account(){
+void writeAccount(){
 	Account ac;
 	ofstream outFile;
 	outFile.open("account.dat",ios::binary|ios::app);
-	ac.create_account();
+	ac.createAccount();
 	outFile.write(reinterpret_cast<char *> (&ac), sizeof(Account));
 	outFile.close();
 }
 
-void display_sp(int n){
+void displaySp(int n){
 	Account ac;
 	bool flag=false;
 	ifstream inFile;
@@ -89,8 +89,8 @@ void display_sp(int n){
 	cout<<"\nBALANCE DETAILS\n";
 
     while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(Account))){
-		if(ac.getacno()==n){
-			ac.show_account();
+		if(ac.getAcno()==n){
+			ac.showAccount();
 			flag=true;
 		}
 	}
@@ -112,9 +112,9 @@ void modify_account(int n){
 	while(!File.eof() && found==false)
 	{
 		File.read(reinterpret_cast<char *> (&ac), sizeof(Account));
-		if(ac.getacno()==n)
+		if(ac.getAcno()==n)
 		{
-			ac.show_account();
+			ac.showAccount();
 			cout<<"\n\nEnter The New Details of account"<<endl;
 			ac.modify();
 			int pos=(-1)*static_cast<int>(sizeof(Account));
@@ -141,7 +141,7 @@ void delete_account(int n){
 	outFile.open("Temp.dat",ios::binary);
 	inFile.seekg(0,ios::beg);
 	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(Account))){
-		if(ac.getacno()!=n){
+		if(ac.getAcno()!=n){
 			outFile.write(reinterpret_cast<char *> (&ac), sizeof(Account));
 		}
 	}
@@ -182,8 +182,8 @@ void deposit_withdraw(int n, int option){
 	}
 	while(!File.eof() && found==false){
 		File.read(reinterpret_cast<char *> (&ac), sizeof(Account));
-		if(ac.getacno()==n){
-			ac.show_account();
+		if(ac.getAcno()==n){
+			ac.showAccount();
 			if(option==1){
 				cout<<"\n\n\tTO DEPOSITE AMOUNT ";
 				cout<<"\n\nEnter The amount to be deposited";
@@ -194,8 +194,8 @@ void deposit_withdraw(int n, int option){
 				cout<<"\n\n\tTO WITHDRAW AMOUNT ";
 				cout<<"\n\nEnter The amount to be withdraw";
 				cin>>amt;
-				int bal=ac.getdeposit()-amt;
-				if((bal<500 && ac.gettype()=='S') || (bal<1000 && ac.gettype()=='C'))
+				int bal=ac.getDeposit()-amt;
+				if((bal<500 && ac.getType()=='S') || (bal<1000 && ac.getType()=='C'))
 					cout<<"Insufficience balance";
 				else
 					ac.draw(amt);
